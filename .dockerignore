@@ -1,4 +1,4 @@
-data/
-logs/
-outputs/
-notebooks/
+adamantium.egg-info
+data
+logs
+outputs

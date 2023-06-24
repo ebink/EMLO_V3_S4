@@ -9,7 +9,7 @@ from lightning.pytorch.utilities import rank_zero_only
 from omegaconf import DictConfig, OmegaConf, open_dict
 from rich.prompt import Prompt
 
-from assignment4.utils import pylogger
+from adamantium.utils import pylogger
 
 log = pylogger.get_pylogger(__name__)
 
@@ -83,10 +83,8 @@ def enforce_tags(cfg: DictConfig, save_to_file: bool = False) -> None:
         if "id" in HydraConfig().cfg.hydra.job:
             raise ValueError("Specify tags before launching a multirun!")
 
-        log.warning(
-            "No tags provided in config. Prompting user to input tags...")
-        tags = Prompt.ask(
-            "Enter a list of comma separated tags", default="dev")
+        log.warning("No tags provided in config. Prompting user to input tags...")
+        tags = Prompt.ask("Enter a list of comma separated tags", default="dev")
         tags = [t.strip() for t in tags.split(",") if t != ""]
 
         with open_dict(cfg):

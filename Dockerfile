@@ -1,7 +1,12 @@
-FROM python:3.8.10-slim
+FROM python:3.8-slim-buster
 
-WORKDIR /src
+LABEL maintainer="Salil Gautam <salil.gtm@gmail.com>"
+LABEL description="Dockerfile for Assignment 4 of EMLOv3."
+
+WORKDIR /workspace
+
 COPY . .
 
-RUN pip install --upgrade pip && pip install -r requirements.txt 
+RUN pip install --no-cache-dir -r requirements.txt
+
 RUN pip install -e .

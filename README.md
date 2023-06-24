@@ -1,70 +1,100 @@
-# EMLO-3_Assignment4
-This repo contains session-4 assignment of EMLO course from TSAI.
+# EMLOv3 | Assignment 4
 
-## Introduction
-This assignment contains a template containing pytorch lightning code. Below are few points this template covers:
-
-- Dockerfile for the project
-    - DevContainer for the Project
-    - Docker Image should have your package installed
-- Add CIFAR10 Dataset
-- Add TIMM to the project template
-    - Should be able to train any image classification model from TIMM
-## Folder structure
-We can get started with the folder structure for this repository.
-
-## Getting started
-Lets go through the steps required to run this template:
-
-Prerequisite:
-
-- Docker installed on the host system.
-- VS Code if using devcontainer.
-- make tool installed on the host.
-
-Steps: 
-- Git clone this repo onto the host: `git clone https://github.com/devdastl/EMLO-3_Assignment4.git`
-- Build docker image, this repo uses Makefile to easily execute docker command. Run command `make build-image`. you can pass `USERNAME=a PROJECT=b TAG=c` with make command to build docker image of name `a/b:c`.
-- You can also directly pull docker image from Dockerhub instead of building it.
-    - `docker pull devdastl/emlop:assignment4-v1`
-    - `make USERNAME=devdastl run-train`
-- Run `make help` to list available steps.
-<br>
-
-There are three ways to exectue training and evaluation on Docker container and these are coverd below:
-
-### Run training and evaluation using Makefile
-To directly run training and evaluation on built image you can run following make command:
-- To start training on CIFAR: `make run-train`
-- To train on MNSIT: `make run-train COMMAND="data=mnist model=mnist"`
-    - This will train and put model and log in `/outputs/date/time/lightning_logs` as well as a temp model in `/outputs`.
-    - 
-- To start evaluation: `make run-eval`
-- Start eval on MNIST: `make run-eval COMMAND="data=mnist model=mnist"` 
-
-### Run interactive using Makefile
-
-### Run VS code specific devcontainer
+[![pytorch](https://img.shields.io/badge/PyTorch_2.0+-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/get-started/locally/)
+[![lightning](https://img.shields.io/badge/-Lightning_2.0+-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai/)
+[![hydra](https://img.shields.io/badge/Config-Hydra_1.3-89b8cd)](https://hydra.cc/)
+[![black](https://img.shields.io/badge/Code%20Style-Black-black.svg?labelColor=gray)](https://black.readthedocs.io/en/stable/)
 
 
+## Adamantium 
 
-```
-copper_train --help
+<em>The name is inspired by the metal alloy which is bonded to the character Wolverine's skeleton and claws.</em>
+
+Adamantium is a custom python package which currently supports usage of any model available in TIMM for training & evalution on CIFAR10 dataset. All functionalities can be controlled by hydra configs.
+
+The setup can be run in two ways:
+
+## Using Dev Container
+
+1. Clone the repository.
+
+```bash
+git clone https://github.com/salil-gtm/emlov3_assignment_4.git
 ```
 
-examples
+2. Open the repo in VS Code.
 
-- `copper_train data.num_workers=16`
-- `copper_train data.num_workers=16 trainer.deterministic=True +trainer.fast_dev_run=True`
-
-## Development
-
-Install in dev mode
-
-```
-pip install -e .
+```bash 
+cd emlov3_assignment_4
+code .
 ```
 
-### Docker
+3. Install the Dev Container Extension in VS Code.
 
-<docker-usage-instructions-here>
+4. Use Command Palette > Dev Container: Build and Open in Container.
+
+5. Now you can use the terminal in VS Code to run the commands mentioned below.
+
+Training can be done using the following commands:
+
+```bash
+python adamantium/train.py data.num_workers=4
+```
+
+Evaluation can be done using the following commands:
+
+```bash
+python adamantium/eval.py data.num_workers=4
+```
+
+Note: The above commands will run the training & evaluation using the default config file.
+
+
+## Using Docker Image
+
+1. Pull the docker image.
+
+```bash
+docker pull salilgtm/emlov3_assignment_4:latest
+```
+
+2. To run the docker image for training & evaluation, use the following command:
+
+```bash
+docker run -it salilgtm/emlov3_assignment_4:latest sh -c "python adamantium/train.py data.num_workers=4 && python adamantium/eval.py data.num_workers=4"
+```
+
+Note: The above commands will run the training & evaluation using the default config file.
+
+
+## Config Structure
+
+```bash
+.
+├── __init__.py
+├── data
+│   └── cifar10.yaml
+├── eval.yaml
+├── hydra
+│   └── default.yaml
+├── model
+│   └── hf.yaml
+├── paths
+│   └── default.yaml
+├── train.yaml
+└── trainer
+    ├── cpu.yaml
+    └── default.yaml
+
+5 directories, 9 files
+```
+
+Paramters can be overriden by passing them as arguments to the command line. For example, to change the batch size, use the following command:
+
+```bash
+python adamantium/train.py data.num_workers=4 data.batch_size=64
+```
+
+## Author
+
+- Salil Gautam
