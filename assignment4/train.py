@@ -1,22 +1,11 @@
-import pyrootutils
-
-root = pyrootutils.setup_root(
-    search_from=__file__,
-    indicator=[".git", "pyproject.toml"],
-    pythonpath=True,
-    dotenv=True,
-)
-
 from typing import Tuple, Dict
 
 import lightning as L
-from copper.models.cifar_module import CIFAR10LitModule
-from lightning import LightningDataModule
-from lightning import Trainer
-from lightning import LightningModule
+import torch
 import hydra
 from omegaconf import DictConfig
-from copper import utils
+
+from assignment4 import utils
 
 log = utils.get_pylogger(__name__)
 
@@ -47,6 +36,8 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
         log.info("Starting training!")
         trainer.fit(model=model, datamodule=datamodule,
                     ckpt_path=cfg.get("ckpt_path"))
+        log.info(f"saving temperory model in outputs/temp_trained.pth for quick eval step")
+        trainer.save_checkpoint("outputs/temp_trained.ckpt")
 
     train_metrics = trainer.callback_metrics
 

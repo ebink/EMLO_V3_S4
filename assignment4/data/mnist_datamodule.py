@@ -1,13 +1,39 @@
 from typing import Any, Dict, Optional, Tuple
-import logging
+
 import torch
 from lightning import LightningDataModule
 from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
-logger = logging.getLogger(__file__)
 
-class CIFAR10DataModule(LightningDataModule):
+
+class MNISTDataModule(LightningDataModule):
+    """Example of LightningDataModule for MNIST dataset.
+
+    A DataModule implements 6 key methods:
+        def prepare_data(self):
+            # things to do on 1 GPU/TPU (not on every GPU/TPU in DDP)
+            # download data, pre-process, split, save to disk, etc...
+        def setup(self, stage):
+            # things to do on every process in DDP
+            # load data, set variables, etc...
+        def train_dataloader(self):
+            # return train dataloader
+        def val_dataloader(self):
+            # return validation dataloader
+        def test_dataloader(self):
+            # return test dataloader
+        def teardown(self):
+            # called on every process in DDP
+            # clean up after fit or test
+
+    This allows you to share a full dataset without explaining how to download,
+    split, transform and process the data.
+
+    Read the docs:
+        https://lightning.ai/docs/pytorch/latest/data/datamodule.html
+    """
+
     def __init__(
         self,
         data_dir: str = "data/",
@@ -24,25 +50,24 @@ class CIFAR10DataModule(LightningDataModule):
 
         # data transformations
         self.transforms = transforms.Compose(
-            [
-                transforms.Resize(224),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-            ]
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
         )
 
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
 
-    def prepare_data(self):
-        CIFAR10(self.hparams.data_dir, train=True, download=True)
-        CIFAR10(self.hparams.data_dir, train=False, download=True)
-
     @property
     def num_classes(self):
-        # CIFAR 10 has 10 classes to train on
         return 10
+
+    def prepare_data(self):
+        """Download data if needed.
+
+        Do not use it to assign state (self.x = y).
+        """
+        MNIST(self.hparams.data_dir, train=True, download=True)
+        MNIST(self.hparams.data_dir, train=False, download=True)
 
     def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
@@ -52,8 +77,10 @@ class CIFAR10DataModule(LightningDataModule):
         """
         # load and split datasets only if not loaded already
         if not self.data_train and not self.data_val and not self.data_test:
-            trainset = CIFAR10(self.hparams.data_dir, train=True, transform=self.transforms)
-            testset = CIFAR10(self.hparams.data_dir, train=False, transform=self.transforms)
+            trainset = MNIST(self.hparams.data_dir, train=True,
+                             transform=self.transforms)
+            testset = MNIST(self.hparams.data_dir, train=False,
+                            transform=self.transforms)
             dataset = ConcatDataset(datasets=[trainset, testset])
             self.data_train, self.data_val, self.data_test = random_split(
                 dataset=dataset,
@@ -100,5 +127,6 @@ class CIFAR10DataModule(LightningDataModule):
         """Things to do when loading checkpoint."""
         pass
 
+
 if __name__ == "__main__":
-    _ = CIFAR10DataModule()
+    _ = MNISTDataModule()

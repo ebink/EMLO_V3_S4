@@ -1,11 +1,7 @@
-FROM python:3.9.14-slim-bullseye
+FROM python:3.8.10-slim
 
-WORKDIR /opt/src
-
-COPY requirements.txt requirements.txt
-
-RUN pip3 install -r requirements.txt && rm -rf /root/.cache/pip
-
+WORKDIR /src
 COPY . .
 
-CMD ["python", "copper/train.py" ]
+RUN pip install --upgrade pip && pip install -r requirements.txt 
+RUN pip install -e .
