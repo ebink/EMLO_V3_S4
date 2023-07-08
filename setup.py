@@ -3,18 +3,20 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="adamantium",
-    version="1.0.0",
-    description="EMLOv3 Base Setup",
-    author="Salil Gautam",
-    author_email="salil.gtm@gmail.com",
-    url="https://github.com/salil-gtm/emlov3_assignment_4",
+    name="src",
+    version="0.0.1",
+    description="PyTorch Lightning Project Setup using Hydra with TIMM template.",
+    author="",
+    author_email="",
+    url="https://github.com/RSWAIN1486/emlov3-pytorchlightning-hydra",
     install_requires=["lightning", "hydra-core"],
     packages=find_packages(),
+    # use this to customize global commands available in the terminal after installing the package
     entry_points={
         "console_scripts": [
-            "src_train = adamantium.train:main",
-            "src_eval = adamantium.eval:main",
+            "src_train = src.train:main",
+            "src_eval = src.eval:main",
+            "src_infer = src.infer:main"
         ]
     },
 )

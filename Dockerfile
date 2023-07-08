@@ -1,12 +1,16 @@
-FROM python:3.8-slim-buster
-
-LABEL maintainer="Salil Gautam <salil.gtm@gmail.com>"
-LABEL description="Dockerfile for Assignment 4 of EMLOv3."
+FROM python:3.10-slim-buster
 
 WORKDIR /workspace
 
+COPY requirements.txt requirements.txt
+
+RUN pip3 install -r requirements.txt && rm -rf /root/.cache/pip
+
 COPY . .
 
-RUN pip install --no-cache-dir -r requirements.txt
-
 RUN pip install -e .
+
+
+
+# CMD [ "python3", "src/train.py" ]
+# CMD ["sh", "-c", "python3 src/train.py && python3 src/eval.py"]
