@@ -1,16 +1,7 @@
-FROM python:3.10-slim-buster
+FROM python:3.8.10-slim
 
-WORKDIR /workspace
-
-COPY requirements.txt requirements.txt
-
-RUN pip3 install -r requirements.txt && rm -rf /root/.cache/pip
-
+WORKDIR /src
 COPY . .
 
+RUN pip install --upgrade pip && pip install -r requirements.txt 
 RUN pip install -e .
-
-
-
-# CMD [ "python3", "src/train.py" ]
-# CMD ["sh", "-c", "python3 src/train.py && python3 src/eval.py"]

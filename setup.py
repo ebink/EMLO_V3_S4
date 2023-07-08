@@ -3,20 +3,19 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="src",
+    name="assignment4",
     version="0.0.1",
-    description="PyTorch Lightning Project Setup using Hydra with TIMM template.",
+    description="PyTorch Lightning Project Setup",
     author="",
     author_email="",
-    url="https://github.com/RSWAIN1486/emlov3-pytorchlightning-hydra",
+    url="https://github.com/user/project",
     install_requires=["lightning", "hydra-core"],
     packages=find_packages(),
     # use this to customize global commands available in the terminal after installing the package
     entry_points={
         "console_scripts": [
-            "src_train = src.train:main",
-            "src_eval = src.eval:main",
-            "src_infer = src.infer:main"
+            "assignment4_train = assignment4.train:main",
+            "assignment4_eval = assignment4.eval:main",
         ]
     },
 )

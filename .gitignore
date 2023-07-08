@@ -146,22 +146,10 @@ dmypy.json
 
 # Lightning-Hydra-Template
 configs/local/default.yaml
-data/
-outputs/
-ckpt/
-logs/
+/data/
+/logs/
+/outputs/
 .env
-.autoenv
-dockerMount/
-input.jpg
-imagenet_1k.json
-/logs
-/data
-/ckpt
-/outputs
-/flagged
-imagenet_classes.txt
-model_store/
-temp/
-logs/
-.aim/
+
+# Aim logging
+.aim
